@@ -1,8 +1,8 @@
 #ifndef __COMMON_SYSCALL__
 #define __COMMON_SYSCALL__
 
-#include "syscall.h"
-#include "string.h"
+#include "syscalls.h"
+#include "strings.h"
 
 #ifdef __GNUC__
 #ifdef __amd64

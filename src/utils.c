@@ -6,9 +6,9 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "syscall.h"
+#include "syscalls.h"
 #include "common_syscalls.h"
-#include "string.h"
+#include "string_utils.h"
 
 
 #define BUF_SIZE 512

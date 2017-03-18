@@ -19,8 +19,8 @@
 #include <sys/syscall.h>
 #include <stdlib.h>
 
-#include "../headers/syscall.h"
-#include "../headers/common_syscalls.h"
+#include "syscalls.h"
+#include "common_syscalls.h"
 
 struct linux_dirent64 {
     uint64_t       d_ino;    /* 64-bit inode number */
