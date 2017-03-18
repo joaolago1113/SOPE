@@ -15,7 +15,6 @@
 #define STDOUT_NO 1
     // File number of stdout; 1.
 
-
 #define WRITE_STDOUT(str) ({ \
 	SYSCALL_3 (N_write, STDOUT_NO, str, str_length(str)); \
 })
@@ -31,6 +30,11 @@
 #define WRITE_STDERR_CONST(str) ({ \
 	SYSCALL_3 (N_write, STDERR_NO, str, sizeof(str) - 1); \
 })
+
+#define EXIT(error_code) ({ \
+	SYSCALL_1 (N_exit, error_code); \
+})
+
 
 
 

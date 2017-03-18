@@ -13,6 +13,7 @@
 #define N_execve 59
 #define N_chdir 80
 #define N_waitid 247
+#define N_exit 60
 
 
 #define SYSCALL_0(sys_num) \
