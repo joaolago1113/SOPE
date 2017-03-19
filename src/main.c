@@ -6,6 +6,8 @@
 
 int child = 0;
 
+char** argv_2;
+
 int main (int argc, char* argv[], char* envp[])
 {	
 	//"A child created via fork(2) inherits a copy of its parent's signal mask"
@@ -33,16 +35,16 @@ int main (int argc, char* argv[], char* envp[])
 				search_type = PERM;
 			}else
 			{
-				_exit(2);
+				_exit(2); 
 			}
-	
+	 
 
 	if(!strcmp(argv[4], "-print")){
 		action_type = PRINT;
 	}else
 		if(!strcmp(argv[4], "-delete")){
 			action_type = DELETE;
-		}else
+		}else 
 			if(!strcmp(argv[4], "-exec")){
 				action_type = EXEC;
 			}else
@@ -53,6 +55,7 @@ int main (int argc, char* argv[], char* envp[])
 		argv[3] = argv[3]+1;
 	}
 
+	argv_2 = &argv[5];
 	search(search_type, action_type, argv[3] , argv[1]);
 	sigprocmask(SIG_SETMASK, &oldmask, 0);
     return 0;

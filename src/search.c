@@ -58,6 +58,7 @@ void search(Search search_type, Action action_type , char* name_type_mode, char*
 		}
 		char filepath[350];
 		strcpy(filepath,dir_path_alt);
+		
 		strcat(filepath,"/");
 		strcat(filepath,dentry->d_name);
 		lstat(filepath, &stat_entry);
