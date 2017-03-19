@@ -1,9 +1,11 @@
 CC= gcc
-CFLAGS= -std=c11 -Wall -I"headers"
+
+#CFLAGS= -std=c11 -Wall -I"headers"
+CFLAGS= -std=gnu11 -Wall -I"headers"
 
 #aqui os ficheiros a compilar
-FILES=strings
-HEADERS=common_syscalls.h  strings.h  syscalls.h
+FILES=search action signal_handlers
+HEADERS=action.h search.h macros.h signal_handlers.h
 
 SOURCES= $(foreach file, $(FILES), src/$(file).c )
 OBJECTS= $(foreach file, $(FILES), $(file).o )
