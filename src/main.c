@@ -53,29 +53,6 @@ int main (int argc, char* argv[], char* envp[])
 		argv[3] = argv[3]+1;
 	}
 
-	/*if(!strcmp(argv[1], ".")){
-		char cwd[350];
-		if(getcwd(cwd, sizeof(cwd)) != NULL){
-			argv[1] = cwd;
-		}else{
-			perror("Can't get current dir.\n");
-			exit(7);
-		}
-	}else
-		if(!strcmp(argv[1], "..")){
-			char cwd[350];
-			if(getcwd(cwd, sizeof(cwd)) != NULL){
-				argv[1] = cwd;
-			}else{
-				perror("Can't get current dir.\n");
-				exit(7);
-			}
-			int i;
-			for(i = strlen(argv[1])-1; argv[1][i]!='/'; i--);
-			argv[1][i] = '\0';
-		}
-		*/
-	
 	search(search_type, action_type, argv[3] , argv[1]);
 	sigprocmask(SIG_SETMASK, &oldmask, 0);
     return 0;
