@@ -15,7 +15,7 @@ TEST_LIBS = googletest/bins/gtest_main.a -lpthread
 TEST_FLAGS = -I"headers" -I"googletest/include" -std=gnu++11 
 
 find: $(SOURCES) $(HEADERS_PATHS) src/main.c
-	$(CC) $(CFLAGS) $(SOURCES)  src/main.c -o find
+	$(CC) $(CFLAGS) $(SOURCES)  src/main.c -o sfind
 
 test: $(SOURCES) $(HEADERS_PATHS) src/unit_tests.cpp
 	$(CC) $(CFLAGS) $(SOURCES) -c

@@ -1,7 +1,6 @@
 #include "search.h"
-
-extern int child;
-
+extern int child_counter;
+extern struct sigaction oldsigaction;
 char cwd[350];
 
 char * getDir(char *str){
@@ -19,36 +18,16 @@ char * getDir(char *str){
 void search(Search search_type, Action action_type , char* name_type_mode, char* dir_path)
 {
 
-	
+	//realpth
 	struct dirent *dentry;
 	DIR *dir;
 	struct stat stat_entry;
 
-	char dir_path_alt_mem[350];
-	char *dir_path_alt = dir_path_alt_mem;
-	strcpy(dir_path_alt, dir_path);
-	
-	if((dir_path_alt[0] == '.') && (dir_path_alt[1] == '.') && ((dir_path_alt[2] == '\0')||(dir_path_alt[2] == '/'))){
-		dir_path_alt+=2;
-		char *final;
-		final = getDir("..");
-		strcat(final, dir_path_alt);
-		dir_path_alt = final;
-	}else
-		if((dir_path_alt[0] == '.') && ((dir_path_alt[1] == '\0')||(dir_path_alt[1] == '/'))) {
-			if(strlen(dir_path_alt)>1)
-				dir_path_alt++;
-			char *final;
-			
-			final = getDir(".");
-			if(strlen(dir_path_alt)>1)
-				strcat(final, dir_path_alt);
-			dir_path_alt = final;
-		}
-
+	char dir_path_alt[350];
+	realpath(dir_path, dir_path_alt);
 	if ((dir = opendir(dir_path_alt)) == NULL){
 		perror(dir_path_alt);
-		_exit(2);
+		_exit(11);
 	}
 	
 
@@ -98,6 +77,7 @@ void search(Search search_type, Action action_type , char* name_type_mode, char*
 				}
 				break;
 		}
+sleep(1);
 		if(S_ISDIR(stat_entry.st_mode)){
 			char pathname[350];
 			strcpy(pathname, dir_path);
@@ -108,27 +88,21 @@ void search(Search search_type, Action action_type , char* name_type_mode, char*
 				//itwasdeleted
 				continue;
 			}
-			if((child = fork())){
-				//1)recursividade 2)escrita sync.
-				int status;
-				wait(&status);
-				int exit_status = WEXITSTATUS(status);
-				if(exit_status!=0){
-					write(STDOUT_FILENO, "Search in ", 10);
-					write(STDOUT_FILENO, pathname, strlen(pathname));
-					write(STDOUT_FILENO, " exited with status: ", 21);
-					char exst[10];
-					sprintf(exst, "%d", exit_status);
-					write(STDOUT_FILENO, exst, strlen(exst));
-					write(STDOUT_FILENO, "\n", 1);
-				}
+			if(fork()){
+				child_counter++;
 			}else
 			{
-				signal(SIGINT, signal_handler_2);
+
+				sigaction(SIGTSTP, &oldsigaction,0);
+				signal(SIGINT, SIG_IGN);
+				child_counter = 0;
 				search(search_type, action_type, name_type_mode, pathname);
-				_exit(0);
+
+				while(child_counter--){
+					wait(0);
+				}
+				exit(0);
 			}
 		}
 	}
-	//free(dir_path_alt);
 }

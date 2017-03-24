@@ -4,22 +4,24 @@
 #include "search.h"
 #include "signal_handlers.h"
 
-int child = 0;
+int child_counter;
 
 char** argv_2;
+
+struct sigaction oldsigaction;
 
 int main (int argc, char* argv[], char* envp[])
 {	
 	//"A child created via fork(2) inherits a copy of its parent's signal mask"
-	sigset_t oldmask, newmask;
-	sigprocmask(SIG_BLOCK, 0, &oldmask);
-	newmask = oldmask;
-	sigaddset(&newmask, SIGUSR1);
-	sigaddset(&newmask, SIGUSR2);
-	sigprocmask(SIG_BLOCK, &newmask, 0);
+
+	sigaction(SIGTSTP, 0,&oldsigaction);
+	struct sigaction newsigaction;
+
+	newsigaction = oldsigaction;
+	newsigaction.sa_handler = &signal_handler;
+
+	sigaction(SIGTSTP, &newsigaction,0);
 	signal(SIGINT, signal_handler);
-	signal(SIGUSR1, signal_handler_2);
-	signal(SIGUSR2, signal_handler_2);
 
 	short search_type = 0;
 
@@ -55,8 +57,12 @@ int main (int argc, char* argv[], char* envp[])
 		argv[3] = argv[3]+1;
 	}
 
+	int i;
 	argv_2 = &argv[5];
+	child_counter = 0;
 	search(search_type, action_type, argv[3] , argv[1]);
-	sigprocmask(SIG_SETMASK, &oldmask, 0);
+	for(i = 0; i < child_counter; i++){
+		wait(0);
+	}
     return 0;
 }

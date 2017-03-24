@@ -17,8 +17,9 @@ void action(Action action_type, char* name_file, char* path){
 			{
 				dir_path_aux++;
 			}
-			write(STDOUT_FILENO, dir_path_aux, strlen(dir_path_aux));
-			write(STDOUT_FILENO, "\n", 1);
+			printf("%s\n", dir_path_aux);
+			//write(STDOUT_FILENO, dir_path_aux, strlen(dir_path_aux));
+			//write(STDOUT_FILENO, "\n", 1);
 			break;
 		case DELETE:
 			if(access(dir_path, W_OK)!=-1){				
@@ -51,27 +52,20 @@ void action(Action action_type, char* name_file, char* path){
 			break;
 		case EXEC:
 			;
-			int chlp;
-			if(!(chlp = fork())){
+			
+			if(!fork()){
 				
 				int i;
 				for(i=0; (strcmp(argv_2[i],";") && (argv_2[i]!=0)); i++){
-					
+					if(!strcmp(argv_2[i],"{}")){
+						argv_2[i] = dir_path;
+					}
 				}
-				char * argv_aux[i+2];
-
-				argv_aux[0] = argv_2[0];
-				for(; i-1 ; i--){
-					argv_aux[i] = argv_2[i];
-				}
-				argv_aux[i-1] = name_file;
-				argv_aux[i] = 0;
-				
-				execvp(argv_2[0],argv_aux);
+				argv_2[i] = 0;
+				execvp(argv_2[0],argv_2);
 				_exit(9);
-			}else{
-				int staloc;
-				waitpid(chlp, &staloc, 0);}
+			}else	
+				wait(0);
 			break;
 	}
 }
